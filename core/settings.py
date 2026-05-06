@@ -14,11 +14,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = [
-    "theta-docs.onrender.com",
-    "localhost",
-    "127.0.0.1"
-]
+ALLOWED_HOSTS =['82.112.238.24', 'localhost', '127.0.0.1']
 
 # ===============================
 # APPLICATIONS
@@ -73,23 +69,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # ===============================
 # DATABASE (LOCAL + RENDER SAFE)
 # ===============================
-DATABASE_URL = os.environ.get("DATABASE_URL")
-
-if not DATABASE_URL:
-    raise Exception("DATABASE_URL is not set. Please configure your .env file.")
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=DATABASE_URL,
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'thetadocs_db',
+        'USER': 'thetadocs_user',
+        'PASSWORD': 'Theta123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
-# 🔐 Enable SSL only for production (Render)
-if "localhost" not in DATABASE_URL:
-    DATABASES['default']['OPTIONS'] = {
-        'sslmode': 'require',
-    }
+#   EEnable SSL only for production (Render)
+#if "localhost" not in DATABASE_URL:
+ #   DATABASES['default']['OPTIONS'] = {
+   #     'sslmode': 'require',
+  #  }
 
 # ===============================
 # PASSWORD VALIDATION
@@ -121,7 +117,7 @@ USE_TZ = True
 # ===============================
 # STATIC FILES
 # ===============================
-STATIC_URL = '/static/'
+STATIC_URL = '/thetadocs/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
@@ -175,7 +171,7 @@ JAZZMIN_SETTINGS = {
 # EMAIL CONFIG
 # ===============================
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.hostinger.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -187,13 +183,16 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # ===============================
 # SITE URL
 # ===============================
-SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
+SITE_URL = os.environ.get("SITE_URL", "http://82.112.238.24:8001")
 
 # ===============================
 # SECURITY SETTINGS
 # ===============================
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://82.112.238.24",
+]
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 

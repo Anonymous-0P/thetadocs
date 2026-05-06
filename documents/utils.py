@@ -5,33 +5,48 @@ from django.conf import settings
 
 
 def generate_secure_password(length=8):
+    """
+    Generate a secure random password
+    """
     chars = string.ascii_letters + string.digits + "!@#$%^&*"
     return ''.join(secrets.choice(chars) for _ in range(length))
 
 
 def send_user_credentials_email(username, password, email):
-    subject = "Your Secure Docs Account Access"
+    """
+    Send user credentials via email
+    """
+
+    subject = "Your Theta Docs Account Access"
+
     message = f"""
 Hello {username},
 
-Your account has been created.
+Your account has been successfully created.
 
-Login URL:
-{settings.SITE_URL}/
+Here are your login details:
 
 Username: {username}
-Temporary Password: {password}
+Password: {password}
 
-Please login and change your password immediately.
+⚠️ Please login and change your password immediately for security.
 
-Regards,
-Secure Docs Team
+Login here:
+{settings.SITE_URL}
+
+Regards,  
+Theta Docs Team
 """
 
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [email],
-        fail_silently=False,
-    )
+    try:
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,  # change to True in production if needed
+        )
+        print(f"Email sent successfully to {email}")
+
+    except Exception as e:
+        print("❌ Email sending failed:", str(e))
